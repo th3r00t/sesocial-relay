@@ -19,6 +19,19 @@ and their players.
 This is just the beginning of the project specification, and further features
 will be added as the project progresses.
 
+* Howto
+During the initial development phase, the project will be developed in a way
+where the aggregated data will be stored in a local database. Conversly the
+data being scraped is currently setup with a rsync driven file fetching system.
+
+It is not expected that actual deployment of the relay post development will
+be done in this manner, but it is a good way to get started. Seemingly as a
+biproduct of this, the files being scraped are not the same as the files
+in use by the game server. The work is being done on copies of the files.
+Which should by virtue of rsync be guaranteed to be latest availavle version.
+
+** TODO adjust rsync loop to guarantee no changes to the local files will be synced upstream.
+
 * Current State
 ** Scraping
 *** DONE server settings.
