@@ -65,7 +65,7 @@ Decoupled from the existing server tech, it is it's own daemon
 * Open Source
 The relay is now, and will remain an opensource project. The source code is
 hosted on [[https://github.com/th3r00t/sesocial-relay][github]]. The frontend is closed source, and will be hosted free for all to use
-once it is ready for public use at [[https://spaceengineers.social/][(yourserver).spaceengineers.social].
+once it is ready for public use at [[https://spaceengineers.social/][(yourserver).spaceengineers.social]].
 
 With the relay being opensource, and since it does all the real work of interpreting the data others
 are encouraged to contribute to the project. If you are interested in helping out, please contact
