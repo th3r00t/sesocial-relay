@@ -34,21 +34,21 @@ Which should by virtue of rsync be guaranteed to be latest availavle version.
 
 * Current State
 ** Scraping
-*** DONE server settings.
-*** DONE player list.
-*** DONE faction List.
+*** *DONE* server settings.
+*** *DONE* player list.
+*** *DONE* faction List.
 *** TODO player to faction link.
-*** DONE mod List.
-*** DONE relative top speed settings.
+*** *DONE* mod List.
+*** *DONE* relative top speed settings.
 *** TODO crunch econ data.
 *** TODO server grid list.
 *** TODO link grids to players.
 ** Publishing
-*** DONE publish server settings.
-*** DONE publish player list.
-*** DONE publish faction List.
+*** *DONE* publish server settings.
+*** *DONE* publish player list.
+*** *DONE* publish faction List.
 *** TODO publish player to faction link.
-*** DONE publish mod List.
+*** *DONE* publish mod List.
 *** TODO publish relative top speed settings.
 *** TODO publish crunch econ data.
 *** TODO publish server grid list.
