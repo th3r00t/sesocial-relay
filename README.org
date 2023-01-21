@@ -30,7 +30,6 @@ biproduct of this, the files being scraped are not the same as the files
 in use by the game server. The work is being done on copies of the files.
 Which should by virtue of rsync be guaranteed to be latest availavle version.
 
-** TODO adjust rsync loop to guarantee no changes to the local files will be synced upstream.
 
 * Current State
 ** Scraping
@@ -53,12 +52,12 @@ Which should by virtue of rsync be guaranteed to be latest availavle version.
 *** TODO publish crunch econ data.
 *** TODO publish server grid list.
 *** TODO publish link grids to players.
+** General
+*** TODO adjust rsync loop to guarantee no changes to the local files will be synced upstream.
 
 * Project Goals
-** DONE Scrape in-game information from servers sbc files
-This will be completely decoupled from existing server tech, it will be its
-own daemon that will run on the server and will be able to scrape the
-information from the server's sbc files.
+** Scrape current information from servers sbc files
+Decoupled from the existing server tech, it is it's own daemon
 ** Store results
 *** DONE Put data in local sqlite database
 *** TODO Send data to remote database
