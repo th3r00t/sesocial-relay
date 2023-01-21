@@ -37,9 +37,9 @@ Which should by virtue of rsync be guaranteed to be latest availavle version.
 *** *DONE* /server settings./
 *** *DONE* /player list/.
 *** *DONE* /faction List/.
-*** TODO player to faction link.
 *** *DONE* /mod List/.
 *** *DONE* /relative top speed settings/.
+*** TODO player to faction link.
 *** TODO crunch econ data.
 *** TODO server grid list.
 *** TODO link grids to players.
@@ -47,8 +47,8 @@ Which should by virtue of rsync be guaranteed to be latest availavle version.
 *** *DONE* /publish server settings/.
 *** *DONE* /publish player list/.
 *** *DONE* /publish faction List/.
-*** TODO publish player to faction link.
 *** *DONE* /publish mod List/.
+*** TODO publish player to faction link.
 *** TODO publish relative top speed settings.
 *** TODO publish crunch econ data.
 *** TODO publish server grid list.
