@@ -19,6 +19,20 @@ and their players.
 This is just the beginning of the project specification, and further features
 will be added as the project progresses.
 
+* Questions you'll never have to answer again.
+** You got a mod list I can look at?
+** Who plays on this server?
+** What factions are active here?
+** What's the economy like?
+* Things I hope to see
+** Player wallets.
+** Faction GPS sharing.
+** Watchdog integration.
+** Visual Mapping.
+think general galactic overview things like planets, & other celestial objects. Trade stations etc...
+** Grid Registry.
+** Discord integration via web api for bot hooks.
+
 * Howto
 During the initial development phase, the project will be developed in a way
 where the aggregated data will be stored in a local database. Conversly the
