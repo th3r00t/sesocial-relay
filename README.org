@@ -19,6 +19,28 @@ and their players.
 This is just the beginning of the project specification, and further features
 will be added as the project progresses.
 
+* Current State
+** Scraping
+*** DONE server settings.
+*** DONE player list.
+*** DONE faction List.
+*** TODO player to faction link.
+*** DONE mod List.
+*** DONE relative top speed settings.
+*** TODO crunch econ data.
+*** TODO server grid list.
+*** TODO link grids to players.
+** Publishing
+*** DONE publish server settings.
+*** DONE publish player list.
+*** DONE publish faction List.
+*** TODO publish player to faction link.
+*** DONE publish mod List.
+*** TODO publish relative top speed settings.
+*** TODO publish crunch econ data.
+*** TODO publish server grid list.
+*** TODO publish link grids to players.
+
 * Project Goals
 ** DONE Scrape in-game information from servers sbc files
 This will be completely decoupled from existing server tech, it will be its
@@ -28,4 +50,11 @@ information from the server's sbc files.
 *** DONE Put data in local sqlite database
 *** TODO Send data to remote database
 **** VERIFY Using sqlalchemy this should be as simple as updating the engine creation routine.
+* Open Source
+The relay is now, and will remain an opensource project. The source code is
+hosted on [[https://github.com/th3r00t/sesocial-relay][github]]. The frontend is closed source, and will be hosted free for all to use
+once it is ready for public use at [[https://spaceengineers.social/][(yourserver).spaceengineers.social].
 
+With the relay being opensource, and since it does all the real work of interpreting the data others
+are encouraged to contribute to the project. If you are interested in helping out, please contact
+me on my discord server at [[https://discord.gg/H9TbNJS][discord.gg/H9TbNJS]].
