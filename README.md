@@ -1,56 +1,57 @@
-- [Version 0.1.0-prerelease](#org155d0e8)
-- [Introduction](#org5db20e1)
-- [Questions you'll never have to answer again.](#orgd199bb5)
-  - [You got a mod list I can look at?](#org9df42d0)
-  - [Who plays on this server?](#orga616716)
-  - [What factions are active here?](#org6c495e0)
-  - [What's the economy like?](#orgc2f1d1b)
-- [Things I hope to see](#org2460304)
-  - [Player wallets.](#org9b6d11c)
-  - [Faction GPS sharing.](#org099c62d)
-  - [Watchdog integration.](#orgc136fd5)
-  - [Visual Mapping.](#org6a4dd88)
-  - [Grid Registry.](#orgf9991fe)
-  - [Discord integration via web api for bot hooks.](#org7dea012)
-- [Howto](#org514bea2)
-- [Current State](#org31055dc)
-  - [Scraping](#org66a804a)
-    - [**DONE** *server settings.*](#org118ffff)
-    - [**DONE** *player list*.](#orgcdd5c67)
-    - [**DONE** *faction List*.](#org1336a2c)
-    - [**DONE** *mod List*.](#orgdd6902f)
-    - [**DONE** *relative top speed settings*.](#org7ba2859)
-    - [player to faction link.](#org5281df7)
-    - [crunch econ data.](#org2135590)
-    - [server grid list.](#orgeee12fa)
-    - [link grids to players.](#orgf141eba)
-  - [Publishing](#org0f93210)
-    - [**DONE** *publish server settings*.](#org914979c)
-    - [**DONE** *publish player list*.](#orga89339a)
-    - [**DONE** *publish faction List*.](#org70485f5)
-    - [**DONE** *publish mod List*.](#org169d857)
-    - [publish player to faction link.](#org4df862c)
-    - [publish relative top speed settings.](#org7558af3)
-    - [publish crunch econ data.](#org8c56555)
-    - [publish server grid list.](#org7f854b4)
-    - [publish link grids to players.](#org70de009)
-  - [General](#orgaf4bb70)
-    - [adjust rsync loop to guarantee no changes to the local files will be synced upstream.](#org87020e1)
-- [Project Goals](#orgb42a57b)
-  - [Scrape current information from servers sbc files](#orgecd185d)
-  - [Store results](#org4047fc3)
-    - [Put data in local sqlite database](#org7b170b8)
-    - [Send data to remote database](#org51bfb7d)
-- [Open Source](#org2da8a69)
+- [Version 0.1.0-prerelease](#org3c451d2)
+- [Introduction](#orgd8838f0)
+- [Questions you'll never have to answer again.](#orgad60906)
+  - [You got a mod list I can look at?](#org06faacb)
+  - [Who plays on this server?](#orgdf552cb)
+  - [What factions are active here?](#orgd0a7215)
+  - [What's the economy like?](#org5736261)
+- [Things I hope to see](#orgf7cdae1)
+  - [Player wallets.](#orge5c1546)
+  - [Improved in game economy, and resource trading system.](#org1609a11)
+  - [Faction GPS sharing.](#org80061fb)
+  - [Watchdog integration.](#orgb8f2c5c)
+  - [Visual Mapping.](#org33c3deb)
+  - [Grid Registry.](#orge48472e)
+  - [Discord integration via web api for bot hooks.](#orgd177299)
+- [Howto](#org56c144b)
+- [Current State](#orga232cc5)
+  - [Scraping](#org9a04a69)
+    - [**DONE** *server settings.*](#org09f8e5d)
+    - [**DONE** *player list*.](#org510014b)
+    - [**DONE** *faction List*.](#org7688a1e)
+    - [**DONE** *mod List*.](#org52db196)
+    - [**DONE** *relative top speed settings*.](#org9f4a3fe)
+    - [player to faction link.](#org387c3d4)
+    - [crunch econ data.](#org7cbbc42)
+    - [server grid list.](#orgc0ba510)
+    - [link grids to players.](#org560432b)
+  - [Publishing](#org9aef17e)
+    - [**DONE** *publish server settings*.](#org78bc953)
+    - [**DONE** *publish player list*.](#orgae32252)
+    - [**DONE** *publish faction List*.](#orgeed0949)
+    - [**DONE** *publish mod List*.](#org8798b1f)
+    - [publish player to faction link.](#org1986009)
+    - [publish relative top speed settings.](#org3d08e37)
+    - [publish crunch econ data.](#org8c99756)
+    - [publish server grid list.](#org732558e)
+    - [publish link grids to players.](#orge6cd130)
+  - [General](#org1732a8d)
+    - [adjust rsync loop to guarantee no changes to the local files will be synced downstream.](#org87c7cc1)
+- [Project Goals](#org27ce37e)
+  - [Scrape current information from servers sbc files](#org70a1e7d)
+  - [Store results](#orgfc98714)
+    - [Put data in local sqlite database](#org3dcd6f6)
+    - [Send data to remote database](#orgd6bbaed)
+- [Open Source](#orga2da108)
 
 
 
-<a id="org155d0e8"></a>
+<a id="org3c451d2"></a>
 
 # Version 0.1.0-prerelease
 
 
-<a id="org5db20e1"></a>
+<a id="orgd8838f0"></a>
 
 # Introduction
 
@@ -61,69 +62,94 @@ Each relay will be a server that is connected to the game server and will be abl
 This is just the beginning of the project specification, and further features will be added as the project progresses.
 
 
-<a id="orgd199bb5"></a>
+<a id="orgad60906"></a>
 
 # Questions you'll never have to answer again.
 
 
-<a id="org9df42d0"></a>
+<a id="org06faacb"></a>
 
 ## You got a mod list I can look at?
 
+sesocial-relay will provide a list of mods that are installed on the server. The front end will generate clickable links for all these mods.
 
-<a id="orga616716"></a>
+
+<a id="orgdf552cb"></a>
 
 ## Who plays on this server?
 
+sesocial-relay will provide a list of players that are currently on the server, along with a history of who has played before.
 
-<a id="org6c495e0"></a>
+
+<a id="orgd0a7215"></a>
 
 ## What factions are active here?
 
+sesocial-relay will provide a list of factions that are operating on your server.
 
-<a id="orgc2f1d1b"></a>
+
+<a id="org5736261"></a>
 
 ## What's the economy like?
 
+sesocial-relay will provide a list of all the items that are being traded via crunch economy.
 
-<a id="org2460304"></a>
+
+<a id="orgf7cdae1"></a>
 
 # Things I hope to see
 
 
-<a id="org9b6d11c"></a>
+<a id="orge5c1546"></a>
 
 ## Player wallets.
 
+Gateway feature to hopefully integrate with a full blown economy system.
 
-<a id="org099c62d"></a>
+
+<a id="org1609a11"></a>
+
+## Improved in game economy, and resource trading system.
+
+Out of game digital marketplace for trading in game resources and setting up said trades.
+
+
+<a id="org80061fb"></a>
 
 ## Faction GPS sharing.
 
+Drop a gps marker, and have it listed on your factions page, for your memebers to see.
 
-<a id="orgc136fd5"></a>
+
+<a id="orgb8f2c5c"></a>
 
 ## Watchdog integration.
 
+A watchdog integration to allow for a more robust and reliable way to monitor your server. The framework for this integration is already in place, but it needs to be fleshed out.
 
-<a id="org6a4dd88"></a>
+
+<a id="org33c3deb"></a>
 
 ## Visual Mapping.
 
 think general galactic overview things like planets, & other celestial objects. Trade stations etc&#x2026;
 
 
-<a id="orgf9991fe"></a>
+<a id="orge48472e"></a>
 
 ## Grid Registry.
 
+All grids are listed in your servers sbc file, lets do something with them. Label them, store them, back them up independently of the server.
 
-<a id="org7dea012"></a>
+
+<a id="orgd177299"></a>
 
 ## Discord integration via web api for bot hooks.
 
+This is almost as simple as setting up a quick set of FastAPI endpoints, This could be done either here in the relay or upstream on the frontend.
 
-<a id="org514bea2"></a>
+
+<a id="org56c144b"></a>
 
 # Howto
 
@@ -132,151 +158,151 @@ During the initial development phase, the project will be developed in a way whe
 It is not expected that actual deployment of the relay post development will be done in this manner, but it is a good way to get started. Seemingly as a biproduct of this, the files being scraped are not the same as the files in use by the game server. The work is being done on copies of the files. Which should by virtue of rsync be guaranteed to be latest availavle version.
 
 
-<a id="org31055dc"></a>
+<a id="orga232cc5"></a>
 
 # Current State
 
 
-<a id="org66a804a"></a>
+<a id="org9a04a69"></a>
 
 ## Scraping
 
 
-<a id="org118ffff"></a>
+<a id="org09f8e5d"></a>
 
 ### **DONE** *server settings.*
 
 
-<a id="orgcdd5c67"></a>
+<a id="org510014b"></a>
 
 ### **DONE** *player list*.
 
 
-<a id="org1336a2c"></a>
+<a id="org7688a1e"></a>
 
 ### **DONE** *faction List*.
 
 
-<a id="orgdd6902f"></a>
+<a id="org52db196"></a>
 
 ### **DONE** *mod List*.
 
 
-<a id="org7ba2859"></a>
+<a id="org9f4a3fe"></a>
 
 ### **DONE** *relative top speed settings*.
 
 
-<a id="org5281df7"></a>
+<a id="org387c3d4"></a>
 
 ### TODO player to faction link.
 
 
-<a id="org2135590"></a>
+<a id="org7cbbc42"></a>
 
 ### TODO crunch econ data.
 
 
-<a id="orgeee12fa"></a>
+<a id="orgc0ba510"></a>
 
 ### TODO server grid list.
 
 
-<a id="orgf141eba"></a>
+<a id="org560432b"></a>
 
 ### TODO link grids to players.
 
 
-<a id="org0f93210"></a>
+<a id="org9aef17e"></a>
 
 ## Publishing
 
 
-<a id="org914979c"></a>
+<a id="org78bc953"></a>
 
 ### **DONE** *publish server settings*.
 
 
-<a id="orga89339a"></a>
+<a id="orgae32252"></a>
 
 ### **DONE** *publish player list*.
 
 
-<a id="org70485f5"></a>
+<a id="orgeed0949"></a>
 
 ### **DONE** *publish faction List*.
 
 
-<a id="org169d857"></a>
+<a id="org8798b1f"></a>
 
 ### **DONE** *publish mod List*.
 
 
-<a id="org4df862c"></a>
+<a id="org1986009"></a>
 
 ### TODO publish player to faction link.
 
 
-<a id="org7558af3"></a>
+<a id="org3d08e37"></a>
 
 ### TODO publish relative top speed settings.
 
 
-<a id="org8c56555"></a>
+<a id="org8c99756"></a>
 
 ### TODO publish crunch econ data.
 
 
-<a id="org7f854b4"></a>
+<a id="org732558e"></a>
 
 ### TODO publish server grid list.
 
 
-<a id="org70de009"></a>
+<a id="orge6cd130"></a>
 
 ### TODO publish link grids to players.
 
 
-<a id="orgaf4bb70"></a>
+<a id="org1732a8d"></a>
 
 ## General
 
 
-<a id="org87020e1"></a>
+<a id="org87c7cc1"></a>
 
-### TODO adjust rsync loop to guarantee no changes to the local files will be synced upstream.
+### TODO adjust rsync loop to guarantee no changes to the local files will be synced downstream.
 
 
-<a id="orgb42a57b"></a>
+<a id="org27ce37e"></a>
 
 # Project Goals
 
 
-<a id="orgecd185d"></a>
+<a id="org70a1e7d"></a>
 
 ## Scrape current information from servers sbc files
 
 Decoupled from the existing server tech, it is it's own daemon
 
 
-<a id="org4047fc3"></a>
+<a id="orgfc98714"></a>
 
 ## Store results
 
 
-<a id="org7b170b8"></a>
+<a id="org3dcd6f6"></a>
 
 ### DONE Put data in local sqlite database
 
 
-<a id="org51bfb7d"></a>
+<a id="orgd6bbaed"></a>
 
 ### TODO Send data to remote database
 
 -   VERIFY Using sqlalchemy this should be as simple as updating the engine creation routine.
 
 
-<a id="org2da8a69"></a>
+<a id="orga2da108"></a>
 
 # Open Source
 

@@ -21,17 +21,34 @@ will be added as the project progresses.
 
 * Questions you'll never have to answer again.
 ** You got a mod list I can look at?
+sesocial-relay will provide a list of mods that are installed on the server.
+The front end will generate clickable links for all these mods.
 ** Who plays on this server?
+sesocial-relay will provide a list of players that are currently on the server,
+along with a history of who has played before.
 ** What factions are active here?
+sesocial-relay will provide a list of factions that are operating on your server.
 ** What's the economy like?
+sesocial-relay will provide a list of all the items that are being traded via crunch economy.
+
 * Things I hope to see
 ** Player wallets.
+Gateway feature to hopefully integrate with a full blown economy system.
+** Improved in game economy, and resource trading system.
+Out of game digital marketplace for trading in game resources and setting up said trades.
 ** Faction GPS sharing.
+Drop a gps marker, and have it listed on your factions page, for your memebers to see.
 ** Watchdog integration.
+A watchdog integration to allow for a more robust and reliable way to monitor your server.
+The framework for this integration is already in place, but it needs to be fleshed out.
 ** Visual Mapping.
 think general galactic overview things like planets, & other celestial objects. Trade stations etc...
 ** Grid Registry.
+All grids are listed in your servers sbc file, lets do something with them. Label them, store them, back them up
+independently of the server.
 ** Discord integration via web api for bot hooks.
+This is almost as simple as setting up a quick set of FastAPI endpoints, This could be done either here in the
+relay or upstream on the frontend.
 
 * Howto
 During the initial development phase, the project will be developed in a way
@@ -67,7 +84,7 @@ Which should by virtue of rsync be guaranteed to be latest availavle version.
 *** TODO publish server grid list.
 *** TODO publish link grids to players.
 ** General
-*** TODO adjust rsync loop to guarantee no changes to the local files will be synced upstream.
+*** TODO adjust rsync loop to guarantee no changes to the local files will be synced downstream.
 
 * Project Goals
 ** Scrape current information from servers sbc files
