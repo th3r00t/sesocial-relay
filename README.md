@@ -1,43 +1,43 @@
-- [Version 0.1.0-prerelease](#orgd0cc331)
-- [Introduction](#org87bab2f)
-- [Howto](#org9b2e88d)
-  - [adjust rsync loop to guarantee no changes to the local files will be synced upstream.](#orgfeb41be)
-- [Current State](#org025db9a)
-  - [Scraping](#org64716ef)
-    - [**DONE** server settings.](#org820d052)
-    - [**DONE** player list.](#org11b9537)
-    - [**DONE** faction List.](#orgda59e83)
-    - [player to faction link.](#org1d5c07a)
-    - [**DONE** mod List.](#org6927681)
-    - [**DONE** relative top speed settings.](#orgc2be6cf)
-    - [crunch econ data.](#org0ef19b1)
-    - [server grid list.](#org6bf0794)
-    - [link grids to players.](#orgbcc090c)
-  - [Publishing](#org01722ea)
-    - [**DONE** publish server settings.](#orgca2f8a7)
-    - [**DONE** publish player list.](#org5227695)
-    - [**DONE** publish faction List.](#org057140e)
-    - [publish player to faction link.](#orgdf6f304)
-    - [**DONE** publish mod List.](#orge40041c)
-    - [publish relative top speed settings.](#orgc719230)
-    - [publish crunch econ data.](#orgd05ab22)
-    - [publish server grid list.](#orgdc0f1a5)
-    - [publish link grids to players.](#org3e602b5)
-- [Project Goals](#org099eb83)
-  - [Scrape in-game information from servers sbc files](#org9a1653c)
-  - [Store results](#org6544bb1)
-    - [Put data in local sqlite database](#orgcbf8dc8)
-    - [Send data to remote database](#org44787f6)
-- [Open Source](#org0756615)
+- [Version 0.1.0-prerelease](#org6171bab)
+- [Introduction](#orgfebd5f4)
+- [Howto](#orgac452e6)
+  - [adjust rsync loop to guarantee no changes to the local files will be synced upstream.](#orgfaa3363)
+- [Current State](#org93f172a)
+  - [Scraping](#org39b0fa7)
+    - [**DONE** *server settings.*](#orge7b097a)
+    - [**DONE** *player list*.](#orgaaade50)
+    - [**DONE** *faction List*.](#org2d91e52)
+    - [player to faction link.](#orgb6dd367)
+    - [**DONE** *mod List*.](#org80ca050)
+    - [**DONE** *relative top speed settings*.](#org2f55fef)
+    - [crunch econ data.](#org08527fa)
+    - [server grid list.](#orgc325e76)
+    - [link grids to players.](#org3053f3c)
+  - [Publishing](#orgb677778)
+    - [**DONE** *publish server settings*.](#orgfa981a6)
+    - [**DONE** *publish player list*.](#orgb618505)
+    - [**DONE** *publish faction List*.](#org8e116a2)
+    - [publish player to faction link.](#org503823d)
+    - [**DONE** *publish mod List*.](#orgf1c8fbe)
+    - [publish relative top speed settings.](#org55e03d9)
+    - [publish crunch econ data.](#orge2e553a)
+    - [publish server grid list.](#org5687cd8)
+    - [publish link grids to players.](#org0e6299d)
+- [Project Goals](#orgf93dbca)
+  - [Scrape in-game information from servers sbc files](#orgd342ea9)
+  - [Store results](#orgde9f6d5)
+    - [Put data in local sqlite database](#org3620dd1)
+    - [Send data to remote database](#org85460d8)
+- [Open Source](#orge8fe2a3)
 
 
 
-<a id="orgd0cc331"></a>
+<a id="org6171bab"></a>
 
 # Version 0.1.0-prerelease
 
 
-<a id="org87bab2f"></a>
+<a id="orgfebd5f4"></a>
 
 # Introduction
 
@@ -48,7 +48,7 @@ Each relay will be a server that is connected to the game server and will be abl
 This is just the beginning of the project specification, and further features will be added as the project progresses.
 
 
-<a id="org9b2e88d"></a>
+<a id="orgac452e6"></a>
 
 # Howto
 
@@ -57,146 +57,146 @@ During the initial development phase, the project will be developed in a way whe
 It is not expected that actual deployment of the relay post development will be done in this manner, but it is a good way to get started. Seemingly as a biproduct of this, the files being scraped are not the same as the files in use by the game server. The work is being done on copies of the files. Which should by virtue of rsync be guaranteed to be latest availavle version.
 
 
-<a id="orgfeb41be"></a>
+<a id="orgfaa3363"></a>
 
 ## TODO adjust rsync loop to guarantee no changes to the local files will be synced upstream.
 
 
-<a id="org025db9a"></a>
+<a id="org93f172a"></a>
 
 # Current State
 
 
-<a id="org64716ef"></a>
+<a id="org39b0fa7"></a>
 
 ## Scraping
 
 
-<a id="org820d052"></a>
+<a id="orge7b097a"></a>
 
-### **DONE** server settings.
-
-
-<a id="org11b9537"></a>
-
-### **DONE** player list.
+### **DONE** *server settings.*
 
 
-<a id="orgda59e83"></a>
+<a id="orgaaade50"></a>
 
-### **DONE** faction List.
+### **DONE** *player list*.
 
 
-<a id="org1d5c07a"></a>
+<a id="org2d91e52"></a>
+
+### **DONE** *faction List*.
+
+
+<a id="orgb6dd367"></a>
 
 ### TODO player to faction link.
 
 
-<a id="org6927681"></a>
+<a id="org80ca050"></a>
 
-### **DONE** mod List.
-
-
-<a id="orgc2be6cf"></a>
-
-### **DONE** relative top speed settings.
+### **DONE** *mod List*.
 
 
-<a id="org0ef19b1"></a>
+<a id="org2f55fef"></a>
+
+### **DONE** *relative top speed settings*.
+
+
+<a id="org08527fa"></a>
 
 ### TODO crunch econ data.
 
 
-<a id="org6bf0794"></a>
+<a id="orgc325e76"></a>
 
 ### TODO server grid list.
 
 
-<a id="orgbcc090c"></a>
+<a id="org3053f3c"></a>
 
 ### TODO link grids to players.
 
 
-<a id="org01722ea"></a>
+<a id="orgb677778"></a>
 
 ## Publishing
 
 
-<a id="orgca2f8a7"></a>
+<a id="orgfa981a6"></a>
 
-### **DONE** publish server settings.
-
-
-<a id="org5227695"></a>
-
-### **DONE** publish player list.
+### **DONE** *publish server settings*.
 
 
-<a id="org057140e"></a>
+<a id="orgb618505"></a>
 
-### **DONE** publish faction List.
+### **DONE** *publish player list*.
 
 
-<a id="orgdf6f304"></a>
+<a id="org8e116a2"></a>
+
+### **DONE** *publish faction List*.
+
+
+<a id="org503823d"></a>
 
 ### TODO publish player to faction link.
 
 
-<a id="orge40041c"></a>
+<a id="orgf1c8fbe"></a>
 
-### **DONE** publish mod List.
+### **DONE** *publish mod List*.
 
 
-<a id="orgc719230"></a>
+<a id="org55e03d9"></a>
 
 ### TODO publish relative top speed settings.
 
 
-<a id="orgd05ab22"></a>
+<a id="orge2e553a"></a>
 
 ### TODO publish crunch econ data.
 
 
-<a id="orgdc0f1a5"></a>
+<a id="org5687cd8"></a>
 
 ### TODO publish server grid list.
 
 
-<a id="org3e602b5"></a>
+<a id="org0e6299d"></a>
 
 ### TODO publish link grids to players.
 
 
-<a id="org099eb83"></a>
+<a id="orgf93dbca"></a>
 
 # Project Goals
 
 
-<a id="org9a1653c"></a>
+<a id="orgd342ea9"></a>
 
 ## DONE Scrape in-game information from servers sbc files
 
 This will be completely decoupled from existing server tech, it will be its own daemon that will run on the server and will be able to scrape the information from the server's sbc files.
 
 
-<a id="org6544bb1"></a>
+<a id="orgde9f6d5"></a>
 
 ## Store results
 
 
-<a id="orgcbf8dc8"></a>
+<a id="org3620dd1"></a>
 
 ### DONE Put data in local sqlite database
 
 
-<a id="org44787f6"></a>
+<a id="org85460d8"></a>
 
 ### TODO Send data to remote database
 
 -   VERIFY Using sqlalchemy this should be as simple as updating the engine creation routine.
 
 
-<a id="org0756615"></a>
+<a id="orge8fe2a3"></a>
 
 # Open Source
 
