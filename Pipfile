@@ -1,0 +1,17 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+fastapi = "*"
+sqlalchemy = "*"
+"sqlalchemy.orm" = "*"
+loguru = "*"
+
+[dev-packages]
+pudb = "*"
+ptpython = "*"
+
+[requires]
+python_version = "3.10"
