@@ -3,8 +3,8 @@
 #+EMAIL: admin@mylt.dev
 #+DATE: 2023-02-21
 #+LANGUAGE: en
-#+OPTIONS: toc:t num:nil
-
+#+OPTIONS: toc:t ltoc:t num:nil
+* Version 0.1.0-prerelease
 * Introduction
 Space Engineers Social Relay Project is a project to create a social relay
 network for the game Space Engineers. The goal is to create a network of
