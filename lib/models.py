@@ -1,5 +1,5 @@
 from typing import Optional
-from sqlalchemy import func, Column, DateTime, ForeignKey, Integer, String, Text, Numeric, Identity
+from sqlalchemy import func, Column, DateTime, ForeignKey, String, Identity
 from sqlalchemy.orm import declarative_base, relationship
 
 
@@ -10,7 +10,6 @@ Base = declarative_base()
 
 class Setting(Base):
     __tablename__ = "Settings"
-    # id = Column(Numeric,  Identity(), primary_key=True,)
     server = relationship("Server", back_populates="settings")
     server_id = Column(String, ForeignKey("Server.id"))
     key = Column(String, nullable=False, primary_key=True)
@@ -19,7 +18,6 @@ class Setting(Base):
 
 class Mod(Base):
     __tablename__ = "Mods"
-    # id = Column(Numeric, Identity(), primary_key=True)
     server = relationship("Server", back_populates="mods")
     server_id = Column(String, ForeignKey("Server.id"))
     name = Column(String)
@@ -34,8 +32,8 @@ class Faction(Base):
     name = Column(String)
     tag = Column(String)
     type = Column(String)
-    founder = Column(Numeric, ForeignKey("Players.hashed_id"))
-    leader = Column(Numeric, ForeignKey("Players.hashed_id"))
+    founder = Column(String, ForeignKey("Players.hashed_id"))
+    leader = Column(String, ForeignKey("Players.hashed_id"))
 
 
 class Player(Base):
