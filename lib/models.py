@@ -34,8 +34,8 @@ class Faction(Base):
     name = Column(String)
     tag = Column(String)
     type = Column(String)
-    founder = Column(Numeric, ForeignKey("Players.id"))
-    leader = Column(Numeric, ForeignKey("Players.id"))
+    founder = Column(Numeric, ForeignKey("Players.hashed_id"))
+    leader = Column(Numeric, ForeignKey("Players.hashed_id"))
 
 
 class Player(Base):
