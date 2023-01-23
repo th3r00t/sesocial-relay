@@ -23,7 +23,6 @@ if __name__ == "__main__":
     # initialize the session.
     abs_path = os.path.abspath(__file__).replace("start.py", "")
     config = Config(abs_path)
-    # storage = Storage(config) # Currently auto fetches all files from server during init.
     session = Session(config, files)
     while True:
         session.run()

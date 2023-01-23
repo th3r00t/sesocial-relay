@@ -24,18 +24,6 @@ class Mod(Base):
     workshop_id = Column(String, primary_key=True)
 
 
-class Faction(Base):
-    __tablename__ = "Factions"
-    id = Column(String, Identity(), primary_key=True)
-    server = relationship("Server", back_populates="factions")
-    server_id = Column(String, ForeignKey("Server.id"))
-    name = Column(String)
-    tag = Column(String)
-    type = Column(String)
-    founder = Column(String, ForeignKey("Players.hashed_id"))
-    leader = Column(String, ForeignKey("Players.hashed_id"))
-
-
 class Player(Base):
     __tablename__ = "Players"
     name = Column(String)
@@ -45,8 +33,25 @@ class Player(Base):
     hashed_id = Column(String)
     faction_id: Column(String, ForeignKey("Factions.id"))
     rank = Column(String)
+    server = relationship("Server", back_populates="players")
     last_login = Column(DateTime, default=func.now())
     last_logout = Column(DateTime, default=func.now())
+
+
+
+
+class Faction(Base):
+    __tablename__ = "Factions"
+    id = Column(String, Identity(), primary_key=True)
+    server = relationship("Server", back_populates="factions")
+    server_id = Column(String, ForeignKey("Server.id"))
+    name = Column(String)
+    tag = Column(String)
+    type = Column(String)
+    leader_id = Column(String, ForeignKey("Players.id"))
+    founder_id = Column(String, ForeignKey("Players.id"))
+    leader = relationship("Player", foreign_keys=[leader_id])
+    founder = relationship("Player", foreign_keys=[founder_id])
 
 
 class Server(Base):

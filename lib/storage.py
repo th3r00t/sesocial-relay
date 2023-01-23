@@ -114,8 +114,8 @@ class Storage:
             try:
                 if faction['Type'] == 'PlayerMade':
                     for _faction in _server.factions:
-                        if _faction.id == str(faction['Id']):
-                            if str(int(_faction.leader)) != faction['Leader']:
+                        if _faction.id == faction['Id']:
+                            if _faction.leader != faction['Leader']:
                                 _faction.leader = faction['Leader']
                                 faction_handled = True
                                 break
@@ -125,6 +125,7 @@ class Storage:
                                 break
                     # Faction is new, create it
                     if not faction_handled:
+                        breakpoint()
                         _faction = Faction(
                             id=faction['Id'],
                             name=faction['Name'],
@@ -142,7 +143,7 @@ class Storage:
         for player in players:
             player_handled = False
             for _player in _server.players:
-                if _player.hashed_id == str(player['hashed_id']):
+                if _player.hashed_id == player['hashed_id']:
                     if _player.name != player['name']:
                         _player.name = player['Name']
                         player_handled = True
@@ -168,7 +169,7 @@ class Storage:
         for mod in mods:
             mod_handled = False
             for _mod in _server.mods:
-                if _mod.workshop_id == str(mod['WorkshopId']):
+                if _mod.workshop_id == mod['WorkshopId']:
                     mod_handled = True
                     break
             if not mod_handled:
@@ -190,6 +191,7 @@ class Storage:
         with Session(self.engine) as remote_session:
             server_id = self.config.uuid
             _server = self.get_server_object(server_id, remote_session, session.game_settings())
+            breakpoint()
             self.put_settings(_server, session.game_settings())
             self.put_factions(_server, session.factions())
             self.put_players(_server, session.players())

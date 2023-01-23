@@ -198,17 +198,17 @@ class Session():
         for faction in _faction_list:
             _faction_name = faction.find('Name').text
             _faction_tag = faction.find('Tag').text
-            _faction_id = int(faction.find('FactionId').text)
+            _faction_id = faction.find('FactionId').text
             _faction_type = faction.find('FactionType').text
             _faction_members = []
             _faction_leader = ""
             _faction_founder = ""
             for member in faction.findall('Members/MyObjectBuilder_FactionMember'):
-                _faction_members.append(int(member.find('PlayerId').text))
+                _faction_members.append(member.find('PlayerId').text)
                 if member.find('IsLeader').text == 'true':
-                    _faction_leader = int(member.find('PlayerId').text)
+                    _faction_leader = member.find('PlayerId').text
                 if member.find('IsFounder').text == 'true':
-                    _faction_founder = int(member.find('PlayerId').text)
+                    _faction_founder = member.find('PlayerId').text
             _factions.append({
                     'Id': _faction_id,
                     'Name': _faction_name,
