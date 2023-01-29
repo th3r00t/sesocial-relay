@@ -1,9 +1,10 @@
-import json
 import hashlib
+import json
 from sqlalchemy import create_engine, select
-from sqlalchemy.exc import OperationalError
+from sqlalchemy.exc import OperationalError, IntegrityError
 from sqlalchemy.orm import Session
 from .models import Setting, Mod, Faction, Player, Server
+
 
 class Storage:
     """Create a new Storage object.
@@ -114,18 +115,16 @@ class Storage:
             try:
                 if faction['Type'] == 'PlayerMade':
                     for _faction in _server.factions:
-                        if _faction.id == faction['Id']:
+                        if _faction.id == int(faction['Id']):
+                            faction_handled = True
                             if _faction.leader != faction['Leader']:
                                 _faction.leader = faction['Leader']
-                                faction_handled = True
-                                break
-                            else:
-                                # Faction is the same, no need to update
-                                faction_handled = True
-                                break
                     # Faction is new, create it
                     if not faction_handled:
                         breakpoint()
+                        _members = ""
+                        for i in faction['Members']:
+                            _members += i + ","
                         _faction = Faction(
                             id=faction['Id'],
                             name=faction['Name'],
@@ -133,9 +132,9 @@ class Storage:
                             type=faction['Type'],
                             leader=faction['Leader'],
                             founder=faction['Founder'],
+                            members=json.dumps(_members[0:-1]),
                             )
                         _server.factions.append(_faction)
-                        faction_handled = True
             except KeyError:
                 pass
 
@@ -144,21 +143,17 @@ class Storage:
             player_handled = False
             for _player in _server.players:
                 if _player.hashed_id == player['hashed_id']:
-                    if _player.name != player['name']:
-                        _player.name = player['Name']
-                        player_handled = True
-                    if _player.rank != player['level']:
-                        _player.rank = player['level']
-                        player_handled = True
-                        break
-                    else:
-                        # Player is the same, no need to update
-                        player_handled = True
-                        break
+                    player_handled = True
+                    _player = Player(
+                        game_id=player['game_id'],
+                        hashed_id=player['hashed_id'],
+                        name=player['name'],
+                        rank=player['level']
+                        )
             if not player_handled:
                 # Player is new, create it
                 _player = Player(
-                    id=player['game_id'],
+                    game_id=player['game_id'],
                     hashed_id=player['hashed_id'],
                     name=player['name'],
                     rank=player['level']
@@ -169,7 +164,7 @@ class Storage:
         for mod in mods:
             mod_handled = False
             for _mod in _server.mods:
-                if _mod.workshop_id == mod['WorkshopId']:
+                if _mod.workshop_id == str(mod['WorkshopId']):
                     mod_handled = True
                     break
             if not mod_handled:
@@ -178,7 +173,6 @@ class Storage:
                     workshop_id=mod['WorkshopId']
                     )
                 _server.mods.append(_mod)
-                mod_handled = True
 
     def update_remote(self, session):
         """Update remote data on spaceengineers.social.
@@ -191,12 +185,14 @@ class Storage:
         with Session(self.engine) as remote_session:
             server_id = self.config.uuid
             _server = self.get_server_object(server_id, remote_session, session.game_settings())
-            breakpoint()
             self.put_settings(_server, session.game_settings())
             self.put_factions(_server, session.factions())
             self.put_players(_server, session.players())
             self.put_mods(_server, session.mods())
             remote_session.flush()
             remote_session.add(_server)
-            remote_session.commit()
+            try:
+                remote_session.commit()
+            except IntegrityError:
+                import pudb; pudb.pm()
             remote_session.close()
