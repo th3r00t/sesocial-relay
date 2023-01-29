@@ -1,9 +1,6 @@
-#:!/usr/bin/env python3
-import subprocess
+#!/usr/bin/env python3
 import os
-from fastapi import FastAPI
 from lib.session import Session
-from lib.storage import Storage
 from lib.config import Config
 
 # TODO: Add logging.
