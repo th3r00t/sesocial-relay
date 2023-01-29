@@ -1,5 +1,6 @@
 from typing import Optional
-from sqlalchemy import func, Column, DateTime, ForeignKey, String, Identity
+from sqlalchemy import func, Column, DateTime,\
+        ForeignKey, String, Identity, Integer
 from sqlalchemy.orm import declarative_base, relationship
 
 
@@ -27,36 +28,37 @@ class Mod(Base):
 class Player(Base):
     __tablename__ = "Players"
     name = Column(String)
-    id = Column(String, Identity(), primary_key=True)
+    id = Column(Integer, Identity(), primary_key=True)
     server = relationship("Server", back_populates="players")
     server_id = Column(String, ForeignKey("Server.id"))
     hashed_id = Column(String)
+    game_id = Column(String)
     faction_id: Column(String, ForeignKey("Factions.id"))
     rank = Column(String)
-    server = relationship("Server", back_populates="players")
     last_login = Column(DateTime, default=func.now())
     last_logout = Column(DateTime, default=func.now())
 
 
-
-
 class Faction(Base):
     __tablename__ = "Factions"
-    id = Column(String, Identity(), primary_key=True)
+    id = Column(Integer, Identity(), primary_key=True)
     server = relationship("Server", back_populates="factions")
     server_id = Column(String, ForeignKey("Server.id"))
     name = Column(String)
     tag = Column(String)
     type = Column(String)
-    leader_id = Column(String, ForeignKey("Players.id"))
-    founder_id = Column(String, ForeignKey("Players.id"))
-    leader = relationship("Player", foreign_keys=[leader_id])
-    founder = relationship("Player", foreign_keys=[founder_id])
+    leader = Column(String)
+    founder = Column(String)
+    members = Column(String)
+    # leader_id = Column(String, ForeignKey("Players.hashed_id"))
+    # founder_id = Column(String, ForeignKey("Players.hashed_id"))
+    # leader = relationship("Player", foreign_keys=[leader_id])
+    # founder = relationship("Player", foreign_keys=[founder_id])
 
 
 class Server(Base):
     __tablename__ = "Server"
-    id = Column(String, primary_key=True)
+    id = Column(String, Identity(), primary_key=True)
     name = Column(String)
     ip = Column(String)
     port = Column(String)
