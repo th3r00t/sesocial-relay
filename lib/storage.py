@@ -30,19 +30,11 @@ class Storage:
     def __init__(self, config):
         """Initialize storage object."""
         self.config = config
-        self.sql = self.config.catalogue_db
+        self.sql = self.config.db
         self.user = self.config.user
         self.password = self.config.password
         self.db_host = self.config.db_host
         self.db_port = self.config.db_port
-        self.session_settings_hash = hashlib.sha256()
-        self.server_settings_hash = hashlib.sha256()
-        self.session_players_hash = hashlib.sha256()
-        self.server_players_hash = hashlib.sha256()
-        self.session_factions_hash = hashlib.sha256()
-        self.server_factions_hash = hashlib.sha256()
-        self.session_mods_hash = hashlib.sha256()
-        self.server_mods_hash = hashlib.sha256()
         self.engine = create_engine(self.get_connection_string(),
                                     pool_pre_ping=True)
         self.create_tables()
@@ -60,7 +52,7 @@ class Storage:
         str : sqlalchemy Connection String
         """
         if self.config.db_engine == "sqlite":
-            return f"sqlite:////{self.config.root}/sesocial.sqlite"
+            return f"sqlite:////{self.config.root}/{self.config.db}.sqlite"
         elif self.config.db_engine == "psql":
             return f"postgresql://{self.user}:{self.password}\
             @{self.db_host}:{self.db_port}/{self.sql}"

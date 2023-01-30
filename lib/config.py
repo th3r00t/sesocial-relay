@@ -55,9 +55,9 @@ class Config:
             "DB_HOST": "localhost",
             "DB_PORT": "5432",
             "DB_ENGINE": "sqlite",
-            "DATABASE": "eridanus",
-            "USER": "eridanus",
-            "PASSWORD": "eridanus",
+            "DATABASE": "sesocial",
+            "USER": "sesocial-relay",
+            "PASSWORD": "sesocial-relay",
             "ALLOWED_HOSTS": [
                 "localhost",
                 "127.0.0.1",
@@ -84,7 +84,7 @@ class Config:
         self.TITLE = env.get("TITLE", self._data["TITLE"])
         self.VERSION = env.get("VERSION", self._data["VERSION"])
         self.TITLE = self.TITLE + " ver " + self.VERSION
-        self.catalogue_db = env.get("DATABASE", self._data["DATABASE"])
+        self.db = env.get("DATABASE", self._data["DATABASE"])
         self.user = env.get("PYUSER", self._data["USER"])
         self.password = env.get("PYPASS", self._data["PASSWORD"])
         self.server_ip = env.get("SERVER_IP", self._data["SERVER_IP"])
