@@ -1,8 +1,8 @@
 from typing import Optional
 from sqlalchemy import func, Column, DateTime,\
         ForeignKey, String, Identity, Integer
-from sqlalchemy.orm import declarative_base, relationship
-
+from sqlalchemy.orm import declarative_base, relationship, Mapped
+import json
 
 # TODO: add model for relative top speed configuration.
 
@@ -16,6 +16,9 @@ class Setting(Base):
     key = Column(String, nullable=False, primary_key=True)
     value = Column(String, nullable=False)
 
+    def __str__(self):
+        return f"key={self.key}, value={self.value}"
+
 
 class Mod(Base):
     __tablename__ = "Mods"
@@ -24,19 +27,8 @@ class Mod(Base):
     name = Column(String)
     workshop_id = Column(String, primary_key=True)
 
-
-class Player(Base):
-    __tablename__ = "Players"
-    name = Column(String)
-    id = Column(Integer, Identity(), primary_key=True)
-    server = relationship("Server", back_populates="players")
-    server_id = Column(String, ForeignKey("Server.id"))
-    hashed_id = Column(String)
-    game_id = Column(String)
-    faction_id: Column(String, ForeignKey("Factions.id"))
-    rank = Column(String)
-    last_login = Column(DateTime, default=func.now())
-    last_logout = Column(DateTime, default=func.now())
+    def __str__(self):
+        return f"name={self.name}, workshop_id={self.workshop_id}"
 
 
 class Faction(Base):
@@ -50,10 +42,26 @@ class Faction(Base):
     leader = Column(String)
     founder = Column(String)
     members = Column(String)
-    # leader_id = Column(String, ForeignKey("Players.hashed_id"))
-    # founder_id = Column(String, ForeignKey("Players.hashed_id"))
-    # leader = relationship("Player", foreign_keys=[leader_id])
-    # founder = relationship("Player", foreign_keys=[founder_id])
+
+    def __str__(self):
+        return f"id={self.id}, name={self.name}, tag={self.tag}, type={self.type}, leader={self.leader}, founder={self.founder.__str__()}, members={self.members.__str__()}"
+
+
+class Player(Base):
+    __tablename__ = "Players"
+    name = Column(String)
+    id = Column(Integer, Identity(), primary_key=True)
+    server = relationship("Server", back_populates="players")
+    server_id = Column(String, ForeignKey("Server.id"))
+    hashed_id = Column(String)
+    game_id = Column(String)
+    faction_id = Column(String, ForeignKey("Factions.id"))
+    rank = Column(String)
+    last_login = Column(DateTime, default=func.now())
+    last_logout = Column(DateTime, default=func.now())
+
+    def __str__(self):
+        return f"name={self.name}, id={self.id}, hashed_id={self.hashed_id}, game_id={self.game_id}, faction_id={self.faction_id}, rank={self.rank}, last_login={self.last_login.__str__()}, last_logout={self.last_logout.__str__()}"
 
 
 class Server(Base):
@@ -70,5 +78,18 @@ class Server(Base):
     mods = relationship("Mod", back_populates="server", foreign_keys=[Mod.server_id])
     factions = relationship("Faction", back_populates="server",
                             foreign_keys=[Faction.server_id])
-    players = relationship("Player", back_populates="server",
-                           foreign_keys=[Player.server_id])
+
+    def __str__(self):
+        players_json = ""
+        settings_json = ""
+        mods_json = ""
+        factions_json = ""
+        for player in self.players:
+            players_json += player.__str__() + ", "
+        for setting in self.settings:
+            settings_json += setting.__str__() + ", "
+        for mod in self.mods:
+            mods_json += mod.__str__() + ", "
+        for faction in self.factions:
+            factions_json += faction.__str__() + ", "
+        return f"id={self.id}, name={self.name}, ip={self.ip}, port={self.port}, created_at={self.created_at.__str__()}, updated_at={self.updated_at.__str__()}, players={players_json}, settings={settings_json}, mods={mods_json}, factions={factions_json}"

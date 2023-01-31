@@ -1,8 +1,7 @@
-import hashlib
 import json
 from sqlalchemy import create_engine, select
 from sqlalchemy.exc import OperationalError, IntegrityError
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from .models import Setting, Mod, Faction, Player, Server
 
 
@@ -188,3 +187,19 @@ class Storage:
             except IntegrityError:
                 import pudb; pudb.pm()
             remote_session.close()
+
+    def session(self):
+        return Session(self.engine)
+
+    def get_server(self, server_id=None):
+        with Session(self.engine) as session:
+            if server_id is None:
+                _server = session.query(Server).options(
+                        joinedload(Server.factions),
+                        joinedload(Server.players),
+                        joinedload(Server.mods),
+                        joinedload(Server.settings)
+                        ).all()
+            else:
+                _server = session.execute(select(Server).where(Server.id == server_id)).fetchone()[0]
+            return _server
