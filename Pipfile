@@ -8,6 +8,7 @@ fastapi = "*"
 sqlalchemy = "*"
 "sqlalchemy.orm" = "*"
 loguru = "*"
+steam = "*"
 
 [dev-packages]
 pudb = "*"

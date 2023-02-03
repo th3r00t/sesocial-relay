@@ -1,7 +1,6 @@
 from datetime import datetime
 import socket
 import subprocess
-import os
 from .parsers import SBCParser, LOGParser  # , CFGParser
 from .storage import Storage
 

@@ -1,6 +1,6 @@
 from typing import Optional
 from sqlalchemy import func, Column, DateTime,\
-        ForeignKey, String, Identity, Integer
+        ForeignKey, String, Identity, Integer, Boolean
 from sqlalchemy.orm import declarative_base, relationship, Mapped
 import json
 
@@ -55,6 +55,7 @@ class Player(Base):
     server_id = Column(String, ForeignKey("Server.id"))
     hashed_id = Column(String)
     game_id = Column(String)
+    online = Column(Boolean, default=False)
     faction_id = Column(String, ForeignKey("Factions.id"))
     rank = Column(String)
     last_login = Column(DateTime, default=func.now())
@@ -68,6 +69,10 @@ class Server(Base):
     __tablename__ = "Server"
     id = Column(String, Identity(), primary_key=True)
     name = Column(String)
+    description = Column(String)
+    img_bg = Column(String)
+    img_logo = Column(String)
+    img_icon = Column(String)
     ip = Column(String)
     port = Column(String)
     created_at = Column(DateTime(timezone=True), server_default=func.now())

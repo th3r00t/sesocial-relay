@@ -112,7 +112,6 @@ class Storage:
                                 _faction.leader = faction['Leader']
                     # Faction is new, create it
                     if not faction_handled:
-                        breakpoint()
                         _members = ""
                         for i in faction['Members']:
                             _members += i + ","
@@ -131,6 +130,7 @@ class Storage:
 
     def put_players(self, _server, players):
         for player in players:
+            def player_online(p): return True if p == 'true' else False
             player_handled = False
             for _player in _server.players:
                 if _player.hashed_id == player['hashed_id']:
@@ -139,7 +139,8 @@ class Storage:
                         game_id=player['game_id'],
                         hashed_id=player['hashed_id'],
                         name=player['name'],
-                        rank=player['level']
+                        rank=player['level'],
+                        online=player_online(player['online']),
                         )
             if not player_handled:
                 # Player is new, create it
@@ -147,7 +148,8 @@ class Storage:
                     game_id=player['game_id'],
                     hashed_id=player['hashed_id'],
                     name=player['name'],
-                    rank=player['level']
+                    rank=player['level'],
+                    online=player_online(player['online']),
                     )
                 _server.players.append(_player)
 
