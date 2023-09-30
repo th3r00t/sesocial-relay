@@ -56,7 +56,7 @@ class Player(Base):
     hashed_id = Column(String)
     game_id = Column(String)
     online = Column(Boolean, default=False)
-    faction_id = Column(String, ForeignKey("Factions.id"))
+    faction_id = Column(Integer, ForeignKey("Factions.id"))
     rank = Column(String)
     last_login = Column(DateTime, default=func.now())
     last_logout = Column(DateTime, default=func.now())
