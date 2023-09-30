@@ -12,7 +12,7 @@ Base = declarative_base()
 class Setting(Base):
     __tablename__ = "Settings"
     server = relationship("Server", back_populates="settings")
-    server_id = Column(String, ForeignKey("Server.id"))
+    server_id = Column(Integer, ForeignKey("Server.id"))
     key = Column(String, nullable=False, primary_key=True)
     value = Column(String, nullable=False)
 
@@ -23,7 +23,7 @@ class Setting(Base):
 class Mod(Base):
     __tablename__ = "Mods"
     server = relationship("Server", back_populates="mods")
-    server_id = Column(String, ForeignKey("Server.id"))
+    server_id = Column(Integer, ForeignKey("Server.id"))
     name = Column(String)
     workshop_id = Column(String, primary_key=True)
 
@@ -35,7 +35,7 @@ class Faction(Base):
     __tablename__ = "Factions"
     id = Column(Integer, Identity(), primary_key=True)
     server = relationship("Server", back_populates="factions")
-    server_id = Column(String, ForeignKey("Server.id"))
+    server_id = Column(Integer, ForeignKey("Server.id"))
     name = Column(String)
     tag = Column(String)
     type = Column(String)
@@ -52,7 +52,7 @@ class Player(Base):
     name = Column(String)
     id = Column(Integer, Identity(), primary_key=True)
     server = relationship("Server", back_populates="players")
-    server_id = Column(String, ForeignKey("Server.id"))
+    server_id = Column(Integer, ForeignKey("Server.id"))
     hashed_id = Column(String)
     game_id = Column(String)
     online = Column(Boolean, default=False)
