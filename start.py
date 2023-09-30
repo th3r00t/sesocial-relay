@@ -20,6 +20,8 @@ def spin_server(server):
 if __name__ == "__main__":
     # initialize the session.
     abs_path = os.path.abspath(__file__).replace("start.py", "")
+    os.system("clear")
+    print("Initializing SE Social Relay. . .")
     config = Config(abs_path)
     Servers = []
     for path in config.server_paths:

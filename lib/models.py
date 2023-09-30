@@ -67,7 +67,7 @@ class Player(Base):
 
 class Server(Base):
     __tablename__ = "Server"
-    id = Column(String, Identity(), primary_key=True)
+    id = Column(Integer, Identity(), primary_key=True)
     name = Column(String)
     description = Column(String)
     img_bg = Column(String)

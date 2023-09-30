@@ -3,6 +3,7 @@ from re import S
 import socket
 import xml.etree.ElementTree as ET
 import asyncio
+import os
 import threading
 from .parsers import speed_file_parser, LOGParser  # , CFGParser
 from .storage import Storage
@@ -290,7 +291,7 @@ class Session():
 
         """
         while True:
-            if (datetime.now() - self.timer).seconds > 10:
+            if (datetime.now() - self.timer).seconds > 5:
                 self.timer = datetime.now()
                 pack = {
                     'name': self.instance_name,
@@ -302,6 +303,8 @@ class Session():
                 }
                 self.storage.update_remote(pack)
                 await asyncio.sleep(.05, "Switching to other task")
-                print(f"Session: {self.name} - {self.ip}")
-                print(f"Time: {datetime.now()}")
-                print(f"Settings: {pack['settings']}")
+                os.system('clear')
+                print(f"SE Social Now Monitoring {len(self.config.server_paths)} Servers.")
+                print(f"hostname: {self.name} - {self.ip}")
+                print(f"last updated: {datetime.now().strftime('%H:%M:%S')}")
+                # print(f"Settings: {pack['settings']}")

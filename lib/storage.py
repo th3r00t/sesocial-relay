@@ -71,8 +71,8 @@ class Storage:
             _server = _server_obj.fetchone()[0]
         except (OperationalError, TypeError):
             _server = Server(
-                id=instance_name,
-                name=server['GameName'],
+                # name=server['GameName'],
+                name=instance_name,
                 ip=self.config.server_ip,
                 port=self.config.server_port,
                 )
@@ -197,7 +197,8 @@ class Storage:
             try:
                 remote_session.commit()
             except IntegrityError:
-                import pudb; pudb.pm()
+                # import pudb; pudb.pm()
+                pass
             remote_session.close()
 
     def session(self):
