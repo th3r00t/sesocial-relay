@@ -67,7 +67,7 @@ class Storage:
 
     def get_server_object(self, instance_name, session, server):
         try:
-            _server_obj = session.execute(select(Server).where(Server.id == instance_name))
+            _server_obj = session.execute(select(Server).where(Server.name == instance_name))
             _server = _server_obj.fetchone()[0]
         except (OperationalError, TypeError):
             _server = Server(
