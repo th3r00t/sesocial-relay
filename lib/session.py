@@ -1,7 +1,10 @@
 from datetime import datetime
+from re import S
 import socket
-import subprocess
-from .parsers import SBCParser, LOGParser  # , CFGParser
+import xml.etree.ElementTree as ET
+import asyncio
+import threading
+from .parsers import speed_file_parser, LOGParser  # , CFGParser
 from .storage import Storage
 
 
@@ -37,7 +40,6 @@ class Session():
     name : The name of the host.
     ip : The ip address of the host.
     abs_path : Absolute path to the local directory where the data will be stored.
-    file_list : A list of files to fetch to aggregate data from.
     remote_host : The remote host to connect to.
     sshpass : The password for the remote host.
     common_path : The common path to the Space Engineers data directory.
@@ -47,49 +49,47 @@ class Session():
     relative_top_speed : A SBCParser object for the RelativeTopSpeed.xml file.
     log_file : A LOGParser object for the SpaceEngineersDedicated.log file.
     """
-    def __init__(self, config, files):
+    def __init__(self, config, path):
         self.timer = datetime.now()
         self.name = socket.gethostname()
+        self.instance_name = path.split('/')[-1]
         self.ip = socket.gethostbyname(self.name)
         self.abs_path = config.root
-        self.file_list = files
         self.remote_host = config.ssh_host
         self.sshpass = config.ssh_password
         self.common_path = config.common_path
         self.config = config
         self.storage = Storage(self.config)
-        self.get_data()
-        self.game_file = SBCParser(
-            'GameFile',
-            f'{self.abs_path}data/Sandbox.sbc').parser()
-        self.server_file = SBCParser(
-            'ServerFile',
-            f'{self.abs_path}data/Sandbox_config.sbc').parser()
-        self.relative_top_speed = SBCParser(
-            'SpeedFile',
-            f'{self.abs_path}data/RelativeTopSpeed.xml').parser()
-        self.log_file = LOGParser(
-            'GameLog',
-            f'{self.abs_path}data/SpaceEngineersDedicated_20230109_180024680.log').parser()
+        self.game_file_path = f'{path}/Sandbox.sbc'
+        self.server_file_path = f'{path}/Sandbox_config.sbc'
+        self.speed_file_path = f'{path}/Storage/1359618037.sbm_RTS/RelativeTopSpeed.cfg'
+        self.log_file_path = f'{path}/SpaceEngineersDedicated.log'
+        # self.get_data()
+        # self.game_file = SBCParser(
+        #     'GameFile',
+        #     f'{self.abs_path}Instance/Saves/Sandbox.sbc').parser()
+        # self.server_file = SBCParser(
+        #     'ServerFile',
+        #     f'{self.abs_path}Instance/Saves/Sandbox_config.sbc').parser()
+        # self.relative_top_speed = SBCParser(
+        #     'SpeedFile',
+        #     f'{self.abs_path}data/RelativeTopSpeed.xml').parser()
+        # self.log_file = LOGParser(
+        #     'GameLog',
+        #     f'{self.abs_path}data/SpaceEngineersDedicated_20230109_180024680.log').parser()
 
-    def get_data(self):
-        """Get the latest server side data.
-
-        >>> session.get_data()
+    def get_instances(self):
+        """Get a list of instances.
+        >>> session.get_instances()
+        Returns
+        -------
+        list
         """
-        for f in self.file_list:
-            sshpass = f"sshpass -p '{self.sshpass}'"
-            _fp = self.remote_host + self.common_path + f
-            subprocess.run(
-                    f"{sshpass} rsync -rtvzs -e ssh '{_fp}' {self.abs_path}/data/", shell=True)
-            if f.split('/')[-1] == 'RelativeTopSpeed.cfg':
-                try:
-                    subprocess.call(f"cp {self.abs_path}data/RelativeTopSpeed.cfg \
-                    {self.abs_path}data/RelativeTopSpeed.xml", shell=True)
-                except FileNotFoundError:
-                    pass
+        instances = []
+        for instance in self.config.server_paths:
+            instances.append(instance.split('/')[-1])
 
-    def game_settings(self):
+    async def game_settings(self):
         """Session Settings.
 
         >>> settings = session.game_settings()
@@ -99,9 +99,10 @@ class Session():
         dict
         """
         # TODO: type fields correctly handing type conversions here.
-        _obj = self.game_file.find('Settings')
-        _game_name = self.game_file.find('SessionName').text
-        _game_description = self.game_file.find('Description').text
+        sbc = ET.parse(self.game_file_path)
+        _obj = sbc.find('Settings')
+        _game_name = sbc.find('SessionName').text
+        _game_description = sbc.find('Description').text
         return {
                 'GameName': _game_name,
                 'GameMode': _obj.find('GameMode').text,
@@ -155,7 +156,7 @@ class Session():
                 'ExperimentalMode': _obj.find('ExperimentalMode').text
                 }
 
-    def mods(self):
+    async def mods(self):
         """Session Mods.
 
         >>> mods = session.mods()
@@ -165,7 +166,8 @@ class Session():
         list
         """
         # TODO: urlsafe base64 encode the mod url.
-        _obj = self.game_file.find('Mods')
+        sbc = ET.parse(self.server_file_path)
+        _obj = sbc.find('Mods')
         _mods = []
         for mod in _obj.findall('ModItem'):
             _mod_name = mod.attrib['FriendlyName']
@@ -182,7 +184,7 @@ class Session():
                     })
         return _mods
 
-    def factions(self):
+    async def factions(self):
         """Session Factions.
 
         >>> factions = session.factions()
@@ -191,7 +193,8 @@ class Session():
         -------
         list
         """
-        _obj = self.game_file.find('Factions')
+        sbc = ET.parse(self.game_file_path)
+        _obj = sbc.find('Factions')
         _faction_list = _obj.find('Factions')
         _factions = []
         for faction in _faction_list:
@@ -219,7 +222,7 @@ class Session():
                     })
         return _factions
 
-    def players(self):
+    async def players(self):
         """Session Players.
 
         >>> players = session.players()
@@ -228,7 +231,8 @@ class Session():
         -------
         list
         """
-        _obj = self.game_file.find('AllPlayersData/dictionary')
+        sbc = ET.parse(self.game_file_path)
+        _obj = sbc.find('AllPlayersData/dictionary')
         _player_list = _obj.findall('item')
         _players = []
         for player in _player_list:
@@ -246,7 +250,7 @@ class Session():
                 })
         return _players
 
-    def speed_settings(self):
+    async def speed_settings(self):
         """Session Speed Settings.
 
         >>> speed = session.speed_settings()
@@ -255,40 +259,49 @@ class Session():
         -------
         dict
         """
+        speed_file = speed_file_parser(self.speed_file_path)
         return {
-                'EnableBoosting': self.relative_top_speed.find('EnableBoosting').text,
-                'IgnoreGridsWithoutThrust': self.relative_top_speed.find('IgnoreGridsWithoutThrust').text,
-                'IgnoreGridsWithoutCockpit': self.relative_top_speed.find('IgnoreGridsWithoutCockpit').text,
-                'ParachuteDeployHeight': self.relative_top_speed.find('ParachuteDeployHeight').text,
-                'SpeedLimit': self.relative_top_speed.find('SpeedLimit').text,
-                'RemoteControlSpeedLimit': self.relative_top_speed.find('RemoteControlSpeedLimit').text,
-                'LargeGrid_MinCruise': self.relative_top_speed.find('LargeGrid_MinCruise').text,
-                'LargeGrid_MidCruise': self.relative_top_speed.find('LargeGrid_MidCruise').text,
-                'LargeGrid_MaxCruise': self.relative_top_speed.find('LargeGrid_MaxCruise').text,
-                'LargeGrid_MinMass': self.relative_top_speed.find('LargeGrid_MinMass').text,
-                'LargeGrid_MidMass': self.relative_top_speed.find('LargeGrid_MidMass').text,
-                'LargeGrid_MaxMass': self.relative_top_speed.find('LargeGrid_MaxMass').text,
-                'LargeGrid_MaxBoostSpeed': self.relative_top_speed.find('LargeGrid_MaxBoostSpeed').text,
-                'LargeGrid_ResistanceMultiplier': self.relative_top_speed.find('LargeGrid_ResistanceMultiplier').text,
-                'SmallGrid_MinCruise': self.relative_top_speed.find('SmallGrid_MinCruise').text,
-                'SmallGrid_MidCruise': self.relative_top_speed.find('SmallGrid_MidCruise').text,
-                'SmallGrid_MaxCruise': self.relative_top_speed.find('SmallGrid_MaxCruise').text,
-                'SmallGrid_MinMass': self.relative_top_speed.find('SmallGrid_MinMass').text,
-                'SmallGrid_MidMass': self.relative_top_speed.find('SmallGrid_MidMass').text,
-                'SmallGrid_MaxMass': self.relative_top_speed.find('SmallGrid_MaxMass').text,
-                'SmallGrid_MaxBoostSpeed': self.relative_top_speed.find('SmallGrid_MaxBoostSpeed').text,
-                'SmallGrid_ResistanceMultiplyer': self.relative_top_speed.find('SmallGrid_ResistanceMultiplyer').text
+                'EnableBoosting': speed_file.find('EnableBoosting').text,
+                'IgnoreGridsWithoutThrust': speed_file.find('IgnoreGridsWithoutThrust').text,
+                'IgnoreGridsWithoutCockpit': speed_file.find('IgnoreGridsWithoutCockpit').text,
+                'ParachuteDeployHeight': speed_file.find('ParachuteDeployHeight').text,
+                'SpeedLimit': speed_file.find('SpeedLimit').text,
+                'RemoteControlSpeedLimit': speed_file.find('RemoteControlSpeedLimit').text,
+                'LargeGrid_MinCruise': speed_file.find('LargeGrid_MinCruise').text,
+                'LargeGrid_MidCruise': speed_file.find('LargeGrid_MidCruise').text,
+                'LargeGrid_MaxCruise': speed_file.find('LargeGrid_MaxCruise').text,
+                'LargeGrid_MinMass': speed_file.find('LargeGrid_MinMass').text,
+                'LargeGrid_MidMass': speed_file.find('LargeGrid_MidMass').text,
+                'LargeGrid_MaxMass': speed_file.find('LargeGrid_MaxMass').text,
+                'LargeGrid_MaxBoostSpeed': speed_file.find('LargeGrid_MaxBoostSpeed').text,
+                'LargeGrid_ResistanceMultiplier': speed_file.find('LargeGrid_ResistanceMultiplier').text,
+                'SmallGrid_MinCruise': speed_file.find('SmallGrid_MinCruise').text,
+                'SmallGrid_MidCruise': speed_file.find('SmallGrid_MidCruise').text,
+                'SmallGrid_MaxCruise': speed_file.find('SmallGrid_MaxCruise').text,
+                'SmallGrid_MinMass': speed_file.find('SmallGrid_MinMass').text,
+                'SmallGrid_MidMass': speed_file.find('SmallGrid_MidMass').text,
+                'SmallGrid_MaxMass': speed_file.find('SmallGrid_MaxMass').text,
+                'SmallGrid_MaxBoostSpeed': speed_file.find('SmallGrid_MaxBoostSpeed').text,
+                'SmallGrid_ResistanceMultiplyer': speed_file.find('SmallGrid_ResistanceMultiplyer').text
                 }
 
-    def run(self):
+    async def run(self):
         """Run the session update loop.
 
-        >>> while true: session.run()
         """
-        if (datetime.now() - self.timer).total_seconds() > 1:
-            self.get_data()
-            self.timer = datetime.now()
-            settings = self.game_settings()
-            self.storage.server_obj = settings
-            self.storage.game_settings = settings
-            self.storage.update_remote(self)
+        while True:
+            if (datetime.now() - self.timer).seconds > 10:
+                self.timer = datetime.now()
+                pack = {
+                    'name': self.instance_name,
+                    'settings': await self.game_settings(),
+                    'speed_settings': await self.speed_settings(),
+                    'mods': await self.mods(),
+                    'factions': await self.factions(),
+                    'players': await self.players()
+                }
+                self.storage.update_remote(pack)
+                await asyncio.sleep(.05, "Switching to other task")
+                print(f"Session: {self.name} - {self.ip}")
+                print(f"Time: {datetime.now()}")
+                print(f"Settings: {pack['settings']}")

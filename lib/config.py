@@ -68,7 +68,8 @@ class Config:
             "COMMON_PATH": '',
             "SSH_PASSWORD": '',
             "UUID": str(uuid1()),
-            "BUILD_MODE": "development"
+            "BUILD_MODE": "development",
+            "SERVER_PATHS": [],
         }
         env = os.environ.copy()
         self._fp = "config.json"
@@ -102,6 +103,7 @@ class Config:
         self.db_user = env.get("USER", self._data["USER"])
         self.db_pass = env.get("PASSWORD", self._data["PASSWORD"])
         self.build_mode = env.get("BUILD_MODE", self._data["BUILD_MODE"])
+        self.server_paths = env.get("SERVER_PATHS", self._data["SERVER_PATHS"])
 
     def init_config(self):
         try:

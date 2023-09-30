@@ -65,13 +65,13 @@ class Storage:
         for table in tables:
             table.metadata.create_all(self.engine)
 
-    def get_server_object(self, server_id, session, server):
+    def get_server_object(self, instance_name, session, server):
         try:
-            _server_obj = session.execute(select(Server).where(Server.id == server_id))
+            _server_obj = session.execute(select(Server).where(Server.id == instance_name))
             _server = _server_obj.fetchone()[0]
         except (OperationalError, TypeError):
             _server = Server(
-                id=server_id,
+                id=instance_name,
                 name=server['GameName'],
                 ip=self.config.server_ip,
                 port=self.config.server_port,
@@ -167,7 +167,7 @@ class Storage:
                     )
                 _server.mods.append(_mod)
 
-    def update_remote(self, session):
+    def update_remote(self, pack: dict):
         """Update remote data on spaceengineers.social.
 
         Returns
@@ -176,12 +176,22 @@ class Storage:
             True on success False on failure
         """
         with Session(self.engine) as remote_session:
-            server_id = self.config.uuid
-            _server = self.get_server_object(server_id, remote_session, session.game_settings())
-            self.put_settings(_server, session.game_settings())
-            self.put_factions(_server, session.factions())
-            self.put_players(_server, session.players())
-            self.put_mods(_server, session.mods())
+            if not pack['name'] and pack['settings']:
+                # TODO remove requirements on settings pack.
+                Exception("Server ID & Settings are required.")
+            _server = self.get_server_object(pack['name'], remote_session, pack['settings'])
+            if pack['settings']:
+                self.put_settings(_server, pack['settings'])
+            if pack['factions']:
+                self.put_factions(_server, pack['factions'])
+            if pack['players']:
+                self.put_players(_server, pack['players'])
+            if pack['mods']:
+                self.put_mods(_server, pack['mods'])
+            # self.put_settings(_server, session.game_settings())
+            # self.put_factions(_server, session.factions())
+            # self.put_players(_server, session.players())
+            # self.put_mods(_server, session.mods())
             remote_session.flush()
             remote_session.add(_server)
             try:
@@ -193,9 +203,9 @@ class Storage:
     def session(self):
         return Session(self.engine)
 
-    def get_server(self, server_id=None):
+    def get_server(self, name=None):
         with Session(self.engine) as session:
-            if server_id is None:
+            if name is None:
                 _server = session.query(Server).options(
                         joinedload(Server.factions),
                         joinedload(Server.players),
@@ -203,5 +213,5 @@ class Storage:
                         joinedload(Server.settings)
                         ).all()
             else:
-                _server = session.execute(select(Server).where(Server.id == server_id)).fetchone()[0]
+                _server = session.execute(select(Server).where(Server.id == name)).fetchone()[0]
             return _server
