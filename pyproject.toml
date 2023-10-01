@@ -26,9 +26,9 @@ dependencies = [
   "sqlalchemy.orm",
   "loguru",
   "steam",
-  "flask",
   "python-dotenv",
-  "watchdog"
+  "watchdog",
+  "uvicorn",
 ]
 
 [project.urls]
