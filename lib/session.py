@@ -303,7 +303,7 @@ class Session():
                 }
                 self.storage.update_remote(pack)
                 await asyncio.sleep(.05, "Switching to other task")
-                os.system('clear')
+                os.system('cls')
                 print(f"SE Social Now Monitoring {len(self.config.server_paths)} Servers.")
                 print(f"hostname: {self.name} - {self.ip}")
                 print(f"last updated: {datetime.now().strftime('%H:%M:%S')}")

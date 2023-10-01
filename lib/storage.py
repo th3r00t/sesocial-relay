@@ -214,5 +214,5 @@ class Storage:
                         joinedload(Server.settings)
                         ).all()
             else:
-                _server = session.execute(select(Server).where(Server.id == name)).fetchone()[0]
+                _server = session.execute(select(Server).where(Server.name == name)).fetchone()[0]
             return _server

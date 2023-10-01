@@ -1,6 +1,6 @@
 from typing import Optional
 from sqlalchemy import func, Column, DateTime,\
-        ForeignKey, String, Identity, Integer, Boolean
+        ForeignKey, String, Identity, Integer, Boolean, BigInteger
 from sqlalchemy.orm import declarative_base, relationship, Mapped
 import json
 
@@ -12,7 +12,7 @@ Base = declarative_base()
 class Setting(Base):
     __tablename__ = "Settings"
     server = relationship("Server", back_populates="settings")
-    server_id = Column(Integer, ForeignKey("Server.id"))
+    server_id = Column(BigInteger, ForeignKey("Server.id"))
     key = Column(String, nullable=False, primary_key=True)
     value = Column(String, nullable=False)
 
@@ -23,7 +23,7 @@ class Setting(Base):
 class Mod(Base):
     __tablename__ = "Mods"
     server = relationship("Server", back_populates="mods")
-    server_id = Column(Integer, ForeignKey("Server.id"))
+    server_id = Column(BigInteger, ForeignKey("Server.id"))
     name = Column(String)
     workshop_id = Column(String, primary_key=True)
 
@@ -33,9 +33,9 @@ class Mod(Base):
 
 class Faction(Base):
     __tablename__ = "Factions"
-    id = Column(Integer, Identity(), primary_key=True)
+    id = Column(BigInteger, Identity(), primary_key=True)
     server = relationship("Server", back_populates="factions")
-    server_id = Column(Integer, ForeignKey("Server.id"))
+    server_id = Column(BigInteger, ForeignKey("Server.id"))
     name = Column(String)
     tag = Column(String)
     type = Column(String)
@@ -50,13 +50,13 @@ class Faction(Base):
 class Player(Base):
     __tablename__ = "Players"
     name = Column(String)
-    id = Column(Integer, Identity(), primary_key=True)
+    id = Column(BigInteger, Identity(), primary_key=True)
     server = relationship("Server", back_populates="players")
-    server_id = Column(Integer, ForeignKey("Server.id"))
+    server_id = Column(BigInteger, ForeignKey("Server.id"))
     hashed_id = Column(String)
     game_id = Column(String)
     online = Column(Boolean, default=False)
-    faction_id = Column(Integer, ForeignKey("Factions.id"))
+    faction_id = Column(BigInteger, ForeignKey("Factions.id"))
     rank = Column(String)
     last_login = Column(DateTime, default=func.now())
     last_logout = Column(DateTime, default=func.now())
@@ -67,7 +67,7 @@ class Player(Base):
 
 class Server(Base):
     __tablename__ = "Server"
-    id = Column(Integer, Identity(), primary_key=True)
+    id = Column(BigInteger, Identity(), primary_key=True)
     name = Column(String)
     description = Column(String)
     img_bg = Column(String)
